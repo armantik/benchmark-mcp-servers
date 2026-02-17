@@ -1,6 +1,6 @@
 # Multi-Language MCP Server Performance Benchmark
 
-A comprehensive experimental analysis comparing Model Context Protocol (MCP) server implementations across Java, Go, Node.js, and Python. Testing 3.9 million requests over three benchmark rounds to measure latency, throughput, resource efficiency, and production-readiness characteristics.
+A comprehensive experimental analysis comparing Model Context Protocol (MCP) server implementations across Java, Go, Node.js, Python, and Rust. Testing millions of requests over multiple benchmark rounds to measure latency, throughput, resource efficiency, and production-readiness characteristics.
 
 ## Objective
 
@@ -10,6 +10,7 @@ This repository contains the source code and benchmark suite for a comprehensive
 - **Go**: Official SDK
 - **Node.js**: Official SDK
 - **Python**: FastMCP
+- **Rust**: Official rmcp SDK
 
 The goal is to provide empirical data to inform architectural decisions for production MCP deployments by measuring latency, throughput, resource consumption, and reliability.
 
@@ -32,6 +33,7 @@ benchmark-mcp-servers/
 ├── go-server/      # Official MCP SDK v1.2.0
 ├── nodejs-server/  # SDK v1.26.0 (with CVE-2026-25536 mitigation)
 ├── python-server/  # FastMCP 2.12.0+ + FastAPI
+├── rust-server/    # Official rmcp SDK v0.15.0 + Axum
 ├── benchmark/      # k6 load testing scripts and tools
 └── docker-compose.yml
 ```
@@ -69,6 +71,7 @@ The servers will be available at:
 - Go: `http://localhost:8081`
 - Python: `http://localhost:8082`
 - Node.js: `http://localhost:8083`
+- Rust: `http://localhost:8084`
 
 ### Run Load Tests
 

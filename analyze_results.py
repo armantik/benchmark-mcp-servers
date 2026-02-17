@@ -19,7 +19,7 @@ metrics = [
 ]
 
 # Order matters: python, go, nodejs, java based on typical file structure
-servers = ['python', 'go', 'nodejs', 'java']
+servers = ['python', 'go', 'nodejs', 'java', 'rust']
 
 data = []
 for f in files:

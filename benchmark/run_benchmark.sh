@@ -13,8 +13,9 @@ declare -A SERVERS=(
     [go]="mcp-go-server:8081"
     [nodejs]="mcp-nodejs-server:8083"
     [java]="mcp-java-server:8080"
+    [rust]="mcp-rust-server:8084"
 )
-ALL_SERVICES="python-server go-server nodejs-server java-server"
+ALL_SERVICES="python-server go-server nodejs-server java-server rust-server"
 
 # Colors
 GREEN='\033[0;32m'
@@ -155,7 +156,7 @@ main() {
     echo "║           MCP SERVERS BENCHMARK SUITE                      ║"
     echo "╠══════════════════════════════════════════════════════════════╣"
     echo "║  VUs: 10 | Duration: 5m | CPU: 1 core | RAM: 1GB          ║"
-    echo "║  Servers: python, go, nodejs, java                         ║"
+    echo "║  Servers: python, go, nodejs, java, rust                    ║"
     echo "║  Results: $RESULTS_DIR"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo ""
@@ -169,7 +170,7 @@ main() {
     ok "mock-api is up"
 
     # Benchmark each server
-    for name in python go nodejs java; do
+    for name in python go nodejs java rust; do
         benchmark_server "$name" || warn "Failed to benchmark $name, continuing..."
     done
 
