@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from mcp.server.fastmcp import FastMCP
 from contextlib import asynccontextmanager
+import asyncio
 import httpx
 import time
-import json
+from datetime import datetime, timezone
 from typing import Any, Dict
 
 # Inicialização do FastMCP com stateless HTTP
@@ -46,13 +47,13 @@ async def fetch_external_data(endpoint: str) -> dict:
     Returns:
         Objeto JSON com url, status_code, response_time_ms e server_type
     """
-    start_time = time.time()
-    
+    start_time = time.perf_counter()
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             response = await client.get(endpoint)
-            response_time_ms = int((time.time() - start_time) * 1000)
-            
+            response_time_ms = int((time.perf_counter() - start_time) * 1000)
+
             return {
                 "url": endpoint,
                 "status_code": response.status_code,
@@ -60,7 +61,7 @@ async def fetch_external_data(endpoint: str) -> dict:
                 "server_type": "python"
             }
         except Exception as e:
-            response_time_ms = int((time.time() - start_time) * 1000)
+            response_time_ms = int((time.perf_counter() - start_time) * 1000)
             return {
                 "url": endpoint,
                 "status_code": 0,
@@ -110,19 +111,16 @@ async def simulate_database_query(query: str, delay_ms: int = 0) -> dict:
     Returns:
         Objeto JSON com query, delay_ms, timestamp e server_type
     """
-    import asyncio
-    from datetime import datetime
-    
     if delay_ms < 0 or delay_ms > 5000:
         raise ValueError("delay_ms deve estar entre 0 e 5000")
-    
+
     # Simula o delay
     await asyncio.sleep(delay_ms / 1000.0)
-    
+
     return {
         "query": query,
         "delay_ms": delay_ms,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "server_type": "python"
     }
 
@@ -135,11 +133,11 @@ async def lifespan(app):
 # Criar aplicação FastAPI
 app = FastAPI(lifespan=lifespan)
 
-# Montar o endpoint MCP
-# FastMCP cria rota interna em /mcp, então montamos na raiz
-app.mount("/", mcp.streamable_http_app())
-
-# Health check endpoint
+# Health check endpoint (must be defined before mount)
 @app.get("/health")
 async def health():
     return {"status": "ok", "server_type": "python"}
+
+# Montar o endpoint MCP
+# FastMCP cria rota interna em /mcp, então montamos na raiz
+app.mount("/", mcp.streamable_http_app())

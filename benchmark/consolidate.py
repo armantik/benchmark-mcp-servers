@@ -28,7 +28,7 @@ def consolidate(results_dir):
         'timestamp': datetime.now(timezone.utc).isoformat(),
         'results_dir': results_dir,
         'config': {
-            'vus': 50,
+            'vus': 10,
             'duration': '5m',
             'cpu_limit': '1.0',
             'memory_limit': '1G',

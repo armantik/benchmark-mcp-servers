@@ -56,6 +56,9 @@ type DatabaseOutput struct {
 	ServerType string `json:"server_type"`
 }
 
+// HTTP client with timeout for external requests
+var httpClient = &http.Client{Timeout: 10 * time.Second}
+
 // Tool handlers
 func handleFibonacci(ctx context.Context, req *mcp.CallToolRequest, args FibonacciArgs) (*mcp.CallToolResult, FibonacciOutput, error) {
 	if args.N < 0 || args.N > 40 {
@@ -80,7 +83,7 @@ func handleFibonacci(ctx context.Context, req *mcp.CallToolRequest, args Fibonac
 func handleFetchData(ctx context.Context, req *mcp.CallToolRequest, args FetchDataArgs) (*mcp.CallToolResult, FetchDataOutput, error) {
 	startTime := time.Now()
 
-	resp, err := http.Get(args.Endpoint)
+	resp, err := httpClient.Get(args.Endpoint)
 	responseTimeMs := time.Since(startTime).Milliseconds()
 
 	if err != nil {

@@ -31,6 +31,20 @@ error() { echo -e "${RED}[ERR]${NC}  $*"; }
 
 # ─── Functions ────────────────────────────────────────────────────────
 
+wait_for_mock_api() {
+    info "Waiting for mock-api to be ready..."
+    local elapsed=0
+    while ! curl -sf -m 2 -X PUT "http://localhost:1080/mockserver/status" > /dev/null 2>&1; do
+        sleep 1
+        elapsed=$((elapsed + 1))
+        if [ $elapsed -ge 30 ]; then
+            error "mock-api failed to start after 30s"
+            return 1
+        fi
+    done
+    ok "mock-api is ready (${elapsed}s)"
+}
+
 wait_for_health() {
     local port=$1
     local name=$2
@@ -68,13 +82,38 @@ wait_for_health() {
 warmup() {
     local url=$1
     local name=$2
-    info "Warming up $name (10 requests)..."
+    info "Warming up $name (10 init + 5 tool calls)..."
 
     for i in $(seq 1 10); do
         curl -sf -X POST "$url" \
             -H "Content-Type: application/json" \
             -H "Accept: application/json, text/event-stream" \
             -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"warmup","version":"1.0"}}}' \
+            > /dev/null 2>&1 || true
+    done
+
+    # Warmup with actual tool calls (fibonacci — fast and deterministic)
+    for i in $(seq 1 5); do
+        # Initialize session
+        local init_resp
+        init_resp=$(curl -sf -X POST "$url" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json, text/event-stream" \
+            -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"warmup","version":"1.0"}}}' \
+            -D - 2>/dev/null || true)
+        local session_id
+        session_id=$(echo "$init_resp" | grep -i 'mcp-session-id' | head -1 | sed 's/.*: *//;s/\r//' || true)
+
+        # Call fibonacci tool
+        local session_header=""
+        if [ -n "$session_id" ]; then
+            session_header="-H Mcp-Session-Id: $session_id"
+        fi
+        curl -sf -X POST "$url" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json, text/event-stream" \
+            ${session_header:+"$session_header"} \
+            -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"calculate_fibonacci","arguments":{"n":10}}}' \
             > /dev/null 2>&1 || true
     done
     ok "Warmup complete"
@@ -132,7 +171,7 @@ benchmark_server() {
     sleep 1
 
     # 5. Run k6 benchmark
-    info "Running k6 benchmark (50 VUs, 5m)..."
+    info "Running k6 benchmark (10 VUs, 5m)..."
     k6 run \
         --env SERVER_URL="$url" \
         --env SERVER_NAME="$name" \
@@ -167,7 +206,7 @@ main() {
     info "Ensuring mock-api is running..."
     cd "$PROJECT_DIR"
     docker compose up -d mock-api 2>/dev/null
-    ok "mock-api is up"
+    wait_for_mock_api
 
     # Benchmark each server
     for name in python go nodejs java rust; do

@@ -3,6 +3,7 @@ package com.benchmark.mcp;
 import org.springaicommunity.mcp.annotation.McpTool;
 import org.springaicommunity.mcp.annotation.McpToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
@@ -12,7 +13,11 @@ import java.util.Map;
 @Service
 public class McpToolsService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public McpToolsService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     // Tool 1: calculate_fibonacci
     @McpTool(name = "calculate_fibonacci", description = "Calcula o N-ésimo número de Fibonacci de forma recursiva")
@@ -54,7 +59,7 @@ public class McpToolsService {
             response.put("status_code", httpResponse.getStatusCode().value());
             response.put("response_time_ms", responseTimeMs);
             response.put("server_type", "java");
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             long responseTimeMs = System.currentTimeMillis() - startTime;
             response.put("url", endpoint);
             response.put("status_code", 0);
