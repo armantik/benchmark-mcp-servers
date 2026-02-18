@@ -76,7 +76,7 @@ impl BenchmarkServer {
     }
 
     #[tool(description = "Calculate a Fibonacci number recursively (CPU-bound)")]
-    async fn calculate_fibonacci(
+    fn calculate_fibonacci(
         &self,
         Parameters(params): Parameters<FibonacciParams>,
     ) -> Result<CallToolResult, McpError> {
@@ -91,9 +91,7 @@ impl BenchmarkServer {
             )]));
         }
         let n = params.n as u32;
-        let result = tokio::task::spawn_blocking(move || fibonacci(n))
-            .await
-            .map_err(|e| McpError::internal_error(format!("fibonacci task failed: {}", e), None))?;
+        let result = fibonacci(n);
         let response = serde_json::json!({
             "input": params.n,
             "result": result,
@@ -203,7 +201,10 @@ async fn health() -> Json<Value> {
 async fn main() {
     tracing_subscriber::fmt::init();
 
-    let client = reqwest::Client::new();
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(10))
+        .build()
+        .unwrap();
     let service = StreamableHttpService::new(
         move || Ok(BenchmarkServer::new(client.clone())),
         LocalSessionManager::default().into(),

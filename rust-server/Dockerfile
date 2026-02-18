@@ -1,6 +1,4 @@
-FROM rust:1.88-alpine AS builder
-
-RUN apk add --no-cache musl-dev
+FROM rust:1.88-slim AS builder
 
 WORKDIR /app
 
@@ -14,10 +12,10 @@ RUN rm -rf src
 COPY src ./src
 RUN touch src/main.rs && cargo build --release
 
-# Runtime image
-FROM alpine:latest
+# Runtime image (glibc — faster allocator + SIMD string ops vs musl)
+FROM debian:bookworm-slim
 
-RUN apk --no-cache add ca-certificates
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /root/
 

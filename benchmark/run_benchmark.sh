@@ -37,8 +37,8 @@ wait_for_mock_api() {
     while ! curl -sf -m 2 -X PUT "http://localhost:1080/mockserver/status" > /dev/null 2>&1; do
         sleep 1
         elapsed=$((elapsed + 1))
-        if [ $elapsed -ge 30 ]; then
-            error "mock-api failed to start after 30s"
+        if [ $elapsed -ge 60 ]; then
+            error "mock-api failed to start after 60s"
             return 1
         fi
     done
@@ -205,7 +205,7 @@ main() {
     # Ensure mock-api is running
     info "Ensuring mock-api is running..."
     cd "$PROJECT_DIR"
-    docker compose up -d mock-api 2>/dev/null
+    docker compose up -d --force-recreate mock-api
     wait_for_mock_api
 
     # Benchmark each server
