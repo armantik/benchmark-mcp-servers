@@ -1,0 +1,264 @@
+{
+  "timestamp": "2026-02-19T05:55:02.177393+00:00",
+  "results_dir": "/Users/armanajabkhani/code/benchmarks/benchmark-mcp-servers/benchmark/results/20260219_063815",
+  "config": {
+    "vus": 10,
+    "duration": "5m",
+    "cpu_limit": "1.0",
+    "memory_limit": "1G"
+  },
+  "servers": {
+    "go": {
+      "http": {
+        "total_requests": 438180,
+        "failed_requests": 0,
+        "rps": 1369.119757887584,
+        "latency": {
+          "avg": 1.9094497717832664,
+          "min": 0.251,
+          "max": 524.999,
+          "p90": 3.509,
+          "p95": 10.82
+        }
+      },
+      "mcp": {
+        "total_mcp_requests": 219090,
+        "mcp_errors": 0,
+        "error_rate": 0
+      },
+      "tools": {
+        "calculate_fibonacci": {
+          "avg": 1.1719059290702378,
+          "min": 0.358,
+          "max": 15.986,
+          "p90": 1.925,
+          "p95": 2.702599999999999
+        },
+        "fetch_external_data": {
+          "avg": 8.555112008763482,
+          "min": 1.437,
+          "max": 524.999,
+          "p90": 11.0172,
+          "p95": 20.44739999999999
+        },
+        "process_json_data": {
+          "avg": 1.136758820576017,
+          "min": 0.415,
+          "max": 37.122,
+          "p90": 1.753,
+          "p95": 2.364599999999999
+        },
+        "simulate_database_query": {
+          "avg": 11.517970057967027,
+          "min": 10.478,
+          "max": 46.217,
+          "p90": 12.3222,
+          "p95": 13.042599999999998
+        },
+        "_initialize": {
+          "avg": 1.1292159158336814,
+          "min": 0.345,
+          "max": 32.801,
+          "p90": 1.811,
+          "p95": 2.462
+        },
+        "_tools_list": {
+          "avg": 1.221080104066824,
+          "min": 0.514,
+          "max": 56.778,
+          "p90": 1.866,
+          "p95": 2.4967999999999972
+        }
+      },
+      "resources": {
+        "cpu": {
+          "avg": 29.44,
+          "max": 40.44,
+          "min": 0.0
+        },
+        "memory_mb": {
+          "avg": 8.53,
+          "max": 9.25,
+          "min": 2.28
+        }
+      }
+    },
+    "java": {
+      "http": {
+        "total_requests": 438240,
+        "failed_requests": 0,
+        "rps": 1369.3913687503257,
+        "latency": {
+          "avg": 1.868350572745486,
+          "min": 0.326,
+          "max": 262.625,
+          "p90": 3.164,
+          "p95": 10.746
+        }
+      },
+      "mcp": {
+        "total_mcp_requests": 219120,
+        "mcp_errors": 0,
+        "error_rate": 0
+      },
+      "tools": {
+        "calculate_fibonacci": {
+          "avg": 1.4061344468784391,
+          "min": 0.459,
+          "max": 46.685,
+          "p90": 2.4739000000000004,
+          "p95": 3.333
+        },
+        "fetch_external_data": {
+          "avg": 3.6165512504563937,
+          "min": 0.911,
+          "max": 262.625,
+          "p90": 4.8299,
+          "p95": 6.678449999999999
+        },
+        "process_json_data": {
+          "avg": 1.3151243610806882,
+          "min": 0.423,
+          "max": 53.24,
+          "p90": 2.1549000000000005,
+          "p95": 2.8888999999999982
+        },
+        "simulate_database_query": {
+          "avg": 11.46627395947428,
+          "min": 10.505,
+          "max": 70.787,
+          "p90": 12.3539,
+          "p95": 13.261
+        },
+        "_initialize": {
+          "avg": 1.4487331941402213,
+          "min": 0.431,
+          "max": 60.271,
+          "p90": 2.455,
+          "p95": 3.2956499999999957
+        },
+        "_tools_list": {
+          "avg": 1.1277478550565823,
+          "min": 0.436,
+          "max": 44.277,
+          "p90": 1.832,
+          "p95": 2.499449999999999
+        }
+      },
+      "resources": {
+        "cpu": {
+          "avg": 31.84,
+          "max": 103.51,
+          "min": 0.44
+        },
+        "memory_mb": {
+          "avg": 186.73,
+          "max": 190.92,
+          "min": 152.75
+        }
+      }
+    },
+    "rust": {
+      "http": {
+        "total_requests": 388700,
+        "failed_requests": 0,
+        "rps": 1214.103793042974,
+        "latency": {
+          "avg": 2.781114298945235,
+          "min": 0.305,
+          "max": 65.692,
+          "p90": 2.379,
+          "p95": 12.244
+        }
+      },
+      "mcp": {
+        "total_mcp_requests": 194350,
+        "mcp_errors": 0,
+        "error_rate": 0
+      },
+      "tools": {
+        "calculate_fibonacci": {
+          "avg": 3.715633804990982,
+          "min": 0.41,
+          "max": 56.629,
+          "p90": 1.8998000000000013,
+          "p95": 41.1246
+        },
+        "fetch_external_data": {
+          "avg": 7.049863493696953,
+          "min": 0.847,
+          "max": 65.692,
+          "p90": 41.103,
+          "p95": 41.652
+        },
+        "process_json_data": {
+          "avg": 15.522418780550558,
+          "min": 0.352,
+          "max": 60.189,
+          "p90": 41.8576,
+          "p95": 42.386
+        },
+        "simulate_database_query": {
+          "avg": 16.96014767172627,
+          "min": 10.576,
+          "max": 54.819,
+          "p90": 41.2766,
+          "p95": 41.783
+        },
+        "_initialize": {
+          "avg": 0.854611975816834,
+          "min": 0.372,
+          "max": 28.921,
+          "p90": 1.11,
+          "p95": 1.5720499999999966
+        },
+        "_tools_list": {
+          "avg": 0.7766624646256756,
+          "min": 0.404,
+          "max": 23.79,
+          "p90": 1.013,
+          "p95": 1.378299999999999
+        }
+      },
+      "resources": {
+        "cpu": {
+          "avg": 14.07,
+          "max": 16.69,
+          "min": 0.0
+        },
+        "memory_mb": {
+          "avg": 3.24,
+          "max": 3.45,
+          "min": 1.58
+        }
+      }
+    }
+  },
+  "rankings": {
+    "latency_avg": [
+      "java",
+      "go",
+      "rust"
+    ],
+    "latency_p95": [
+      "java",
+      "go",
+      "rust"
+    ],
+    "rps": [
+      "java",
+      "go",
+      "rust"
+    ],
+    "cpu_efficiency": [
+      "rust",
+      "go",
+      "java"
+    ],
+    "memory_efficiency": [
+      "rust",
+      "go",
+      "java"
+    ]
+  }
+}
