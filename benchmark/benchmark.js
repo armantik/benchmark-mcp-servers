@@ -9,8 +9,8 @@ const SERVER_NAME = __ENV.SERVER_NAME || 'unknown';
 
 export const options = {
     stages: [
-        { duration: '10s', target: 10 },   // ramp-up
-        { duration: '5m', target: 10 },   // sustained load
+        { duration: '10s', target: 50 },   // ramp-up
+        { duration: '5m', target: 50 },   // sustained load
         { duration: '10s', target: 0 },    // ramp-down
     ],
     thresholds: {
@@ -229,7 +229,7 @@ export function handleSummary(data) {
     const summary = {
         server: SERVER_NAME,
         timestamp: new Date().toISOString(),
-        config: { vus: 10, duration: '5m', server_url: SERVER_URL },
+        config: { vus: 50, duration: '5m', server_url: SERVER_URL },
         http: {
             total_requests: getValue(data, 'http_reqs', 'count', 0),
             failed_requests: getValue(data, 'http_req_failed', 'passes', 0),

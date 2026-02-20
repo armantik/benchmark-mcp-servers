@@ -102,6 +102,7 @@ services:
 
   # Mock API para testes de I/O
   mock-api:
+    platform: linux/amd64
     image: mockserver/mockserver:latest
     container_name: mcp-mock-api
     ports:

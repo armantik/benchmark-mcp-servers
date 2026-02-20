@@ -171,7 +171,7 @@ benchmark_server() {
     sleep 1
 
     # 5. Run k6 benchmark
-    info "Running k6 benchmark (10 VUs, 5m)..."
+    info "Running k6 benchmark (50 VUs, 5m)..."
     k6 run \
         --env SERVER_URL="$url" \
         --env SERVER_NAME="$name" \
@@ -192,10 +192,10 @@ benchmark_server() {
 main() {
     echo ""
     echo "╔══════════════════════════════════════════════════════════════╗"
-    echo "║           MCP SERVERS BENCHMARK SUITE                      ║"
+    echo "║           MCP SERVERS BENCHMARK SUITE                        ║"
     echo "╠══════════════════════════════════════════════════════════════╣"
-    echo "║  VUs: 10 | Duration: 5m | CPU: 1 core | RAM: 1GB          ║"
-    echo "║  Servers: python, go, nodejs, java, rust                    ║"
+    echo "║  VUs: 10 | Duration: 5m | CPU: 1 core | RAM: 1GB             ║"
+    echo "║  Servers: go, java, rust                                     ║"
     echo "║  Results: $RESULTS_DIR"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo ""
@@ -209,7 +209,7 @@ main() {
     wait_for_mock_api
 
     # Benchmark each server
-    for name in python go nodejs java rust; do
+    for name in rust java go; do
         benchmark_server "$name" || warn "Failed to benchmark $name, continuing..."
     done
 
@@ -223,7 +223,7 @@ main() {
 
     echo ""
     echo "╔══════════════════════════════════════════════════════════════╗"
-    echo "║  BENCHMARK COMPLETE                                        ║"
+    echo "║  BENCHMARK COMPLETE                                          ║"
     echo "╠══════════════════════════════════════════════════════════════╣"
     echo "║  Results: $RESULTS_DIR"
     echo "║  Summary: $RESULTS_DIR/summary.json"
